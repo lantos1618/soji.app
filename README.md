@@ -1,3 +1,16 @@
+# Soji 🍶🔊
+Sound Emoji's hosted on the blockchain.
+Sounds that are <10s long + an Emoji
+
+Reasons for this project are;
+- It's fun
+- Giphy vs Tenor and other platforms delete and sensor images.
+- Immortalize dar-ling.
+
+frontend is located at https://github.com/lantos-lgtm/decentralized_soji_frontend
+![soji_frontend](soji.png)
+
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
