@@ -11,6 +11,47 @@ frontend is located at https://github.com/lantos-lgtm/decentralized_soji_fronten
 ![soji_frontend](soji.png)
 
 
+```js
+
+soji:
+  id: someHash
+  name: string
+  description: string
+  author: etherumAddress || shortname
+  owner: etherumAddress || shortname
+  tags: string[]
+  nsfw: nsfw
+  image: imageAddr
+  sound: soundAddr
+  mp4: mp4Addr
+
+nsfwId:
+  sojiId: someHash
+  voter: someHash
+  isNSFW: boolean
+
+
+uploadSoji(_soji: _sojiInput) {
+  // uploads soji to the backend -> IPFS
+}
+
+deleteSoji(_soji: _sojiInput) {
+  // if user is owner
+  // delete
+}
+
+voteNSFW(_soji: _sojiAddress, isNSFW: boolean) {
+  // add nsfw vote
+}
+
+getSojis() {
+  // returns all sojis
+}
+
+
+// user -> cdn -> chainlink + ipfs
+```
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
