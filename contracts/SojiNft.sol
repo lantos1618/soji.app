@@ -4,6 +4,8 @@ pragma solidity ^0.8.4;
 
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
@@ -36,7 +38,8 @@ contract SojiNft is ERC721URIStorage, Ownable {
     //     "audio": "ipfs://cid"
     // }
 
-    string private s_tokenCounter;
+    using Counters for Counters.Counter;
+    Counters.Counter private s_tokenIds;
     string public s_contract_owner;
 
     struct Soji {
@@ -51,18 +54,22 @@ contract SojiNft is ERC721URIStorage, Ownable {
         s_contract_owner = msg.sender;
     }
 
-    transferOwnerContract(address _new_contract_owner) {
+    transferOwnerContract(address new_contract_owner) {
         // if we want to transfer the ownership of the contract
         if(s_contract_owner != msg.sender) {
             revert NotOwner();
         }
-        s_contract_owner = _new_contract_owner
+        s_contract_owner = new_contract_owner
     }
 
-    mintSOJI(address _soji_owner, string memory _tokenURL) public returns(uint256) {
-        _safeMint(_soji_owner, _tokenURL);
+    mintSOJI(address soji_owner, string memory tokenURL) public returns(uint256) {
+        uint256 newSojiId = s_tokenIds.current();
+
+        _safeMint(soji_owner, _tokenURL);
         s_tokenCounter - s_tokenCounter + 1;
-        return s_tokenCounter;
+        _setTokenURI(newItemId, tokenURI)
+        ;
+        return newSojiId;
     }
 
     /////////////////////
