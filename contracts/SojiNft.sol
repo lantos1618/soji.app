@@ -7,9 +7,11 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
-error AlreadyInitialized();
-error NeedMoreETHSent();
-error RangeOutOfBounds();
+
+
+
+error NotOwner();
+
 
 contract SojiNft is ERC721URIStorage, Ownable {
 
@@ -35,16 +37,43 @@ contract SojiNft is ERC721URIStorage, Ownable {
     // }
 
     string private s_tokenCounter;
-    string private s_contract_owner;
+    string public s_contract_owner;
 
-    constructor(string memory _contract_owner) ERC721URIStorage("SOJI"){
-        s_contract_owner = _contract_owner;
+    struct Soji {
+        address author;
+        address owner;
+        address tokenURL;
+    }
+    mapping(address => mapping(uint256 => Soji)) private s_Sojis;
+
+
+    constructor() ERC721URIStorage("SOJI"){
+        s_contract_owner = msg.sender;
+    }
+
+    transferOwnerContract(address _new_contract_owner) {
+        // if we want to transfer the ownership of the contract
+        if(s_contract_owner != msg.sender) {
+            revert NotOwner();
+        }
+        s_contract_owner = _new_contract_owner
     }
 
     mintSOJI(address _soji_owner, string memory _tokenURL) public returns(uint256) {
         _safeMint(_soji_owner, _tokenURL);
         s_tokenCounter - s_tokenCounter + 1;
         return s_tokenCounter;
+    }
 
+    /////////////////////
+    // Getter Functions //
+    /////////////////////
+
+    function getSojis()
+        external
+        view
+        returns (s_Sojis memory)
+    {
+        return s_Sojis;
     }
 }
