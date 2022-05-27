@@ -1,22 +1,14 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.4;
 
-
-
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-
-import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
-
-
-
 
 error NotOwner();
 
-
-contract SojiNft is ERC721URIStorage, Ownable {
-
+contract SojiNft is ERC721URIStorage {
     // Patrick. C example
     // {
     //     "name":"pug",
@@ -40,47 +32,23 @@ contract SojiNft is ERC721URIStorage, Ownable {
 
     using Counters for Counters.Counter;
     Counters.Counter private s_tokenIds;
-    string public s_contract_owner;
 
     struct Soji {
         address author;
         address owner;
         address tokenURL;
     }
-    mapping(address => mapping(uint256 => Soji)) private s_Sojis;
+    mapping(address => mapping(uint256 => Soji)) public s_Sojis;
 
+    constructor() ERC721("sojiNFT", "SOJI") {}
 
-    constructor() ERC721URIStorage("SOJI"){
-        s_contract_owner = msg.sender;
-    }
-
-    transferOwnerContract(address new_contract_owner) {
-        // if we want to transfer the ownership of the contract
-        if(s_contract_owner != msg.sender) {
-            revert NotOwner();
-        }
-        s_contract_owner = new_contract_owner
-    }
-
-    mintSOJI(address soji_owner, string memory tokenURL) public returns(uint256) {
-        uint256 newSojiId = s_tokenIds.current();
-
-        _safeMint(soji_owner, _tokenURL);
-        s_tokenCounter - s_tokenCounter + 1;
-        _setTokenURI(newItemId, tokenURI)
-        ;
-        return newSojiId;
-    }
-
-    /////////////////////
-    // Getter Functions //
-    /////////////////////
-
-    function getSojis()
-        external
-        view
-        returns (s_Sojis memory)
+    function mintSOJI(address soji_owner, string memory tokenURI)
+        public
+        returns (uint256)
     {
-        return s_Sojis;
+        uint256 newItemId = s_tokenIds.current();
+        _safeMint(soji_owner, newItemId);
+        _setTokenURI(newItemId, tokenURI);
+        return newItemId;
     }
 }
