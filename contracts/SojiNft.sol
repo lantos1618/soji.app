@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.14;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "hardhat/console.sol";
 
 error NotOwner();
+error NeedMoreGas();
+error IllegalAttemptToSetAttributes();
 
 contract SojiNft is ERC721URIStorage {
     // Patrick. C example
@@ -27,28 +29,119 @@ contract SojiNft is ERC721URIStorage {
     //     "description": "zerotwo saying darling",
     //     "tags": ["tag"]
     //     "image": "ipfs://cid"
-    //     "audio": "ipfs://cid"
+    //     "animation_url": "ipfs://cid"
     // }
 
     using Counters for Counters.Counter;
     Counters.Counter private s_tokenIds;
 
-    struct Soji {
-        address author;
-        address owner;
-        address tokenURL;
-    }
-    mapping(address => mapping(uint256 => Soji)) public s_Sojis;
+    string private s_unconfirmedTokenURIString;
+
 
     constructor() ERC721("sojiNFT", "SOJI") {}
 
-    function mintSOJI(address soji_owner, string memory tokenURI)
+
+    // a function that checks a string contains a given string and returns true if it does
+    // convert strings to bytes
+    // set index i to 0 then check if next window of haystack is same as needle word 
+    function contains(string memory haystack, string memory needle)
         public
-        returns (uint256)
+        pure
+        returns (bool)
     {
+        // convert strings to bytes
+        bytes memory haystackBytes = bytes(haystack);
+        bytes memory needleBytes = bytes(needle);
+
+        // if needle is bigger then haystack then it can not have word
+        if (needleBytes.length > haystackBytes.length) {
+            return false;
+        }
+
+        // initialize loop set i to 0 and between haystack and needle to prevent array index overflow
+        for (
+            uint256 i = 0;
+            i <= haystackBytes.length - needleBytes.length;
+            i++
+        ) {
+            bool found = true;
+            // check if the word is in the next window of haystack
+            for (uint256 j = 0; j < needleBytes.length; j++) {
+                if (haystackBytes[i + j] != needleBytes[j]) {
+                    found = false;
+                    break;
+                }
+            }
+            // return true found the word
+            if (found) {
+                return true;
+            }
+        }
+        // return false didn't find the word
+        return false;
+    }
+
+    // mints soji but will generate random special attributes
+    function mintSpecialSOJI(
+        address owner,
+        string memory name,
+        string memory description,
+        string memory image,
+        string memory animation_url,
+        string memory tags
+    ) public returns (uint256) {
         uint256 newItemId = s_tokenIds.current();
-        _safeMint(soji_owner, newItemId);
-        _setTokenURI(newItemId, tokenURI);
+        _safeMint(owner, newItemId);
+        s_tokenIds.increment();
+        string memory tokenURI;
+
+        // to mint a special soji we need to generate a random special attribute
+        // return the tokenURL string
+        // then we need to check it agaisnt ipfs
+        // then if they are the same we mint a new one
+        // we can not add to IPFS from this contract as contracts are ment to be d
+
+        // create tokenURI
+        tokenURI = string.concat(
+            "{\"name\":\"",
+            name,
+            "\",\"description\":\"",
+            description,
+            "\",\"image\":\"",
+            image,
+            "\",\"animation_url\":\"",
+            animation_url,
+            "\",\"tags\":\"",
+            tags
+            // tags,
+            // "\"}"
+            
+        );
+
+        if (contains(tokenURI, "attributes")) {
+            // return error
+            revert IllegalAttemptToSetAttributes();
+        }
+
+        // create random attributes using chainlink VRF
+
+        
+
         return newItemId;
+    }
+
+    // function getUnconfirmedTokenURIString(uint256 tokenId) public view returns (string memory) {
+    //     return s_unconfirmedTokenURIString;
+    // }
+
+    // function confirmUnconfirmedTokenURIString(string memory tokenURI) public {
+    //     // fetch tokenURI string from chainlink
+    //     // check if it is the same as the one we have in memory
+    //     // if it is the same then we can set the tokenURI
+        // _setTokenURI(newItemId, tokenURI);
+    // }
+
+    function getSOJICount() public view returns (uint256 count) {
+        return s_tokenIds.current();
     }
 }
