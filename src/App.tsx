@@ -1,5 +1,5 @@
 
-import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { Button, Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 // import { MoralisProvider } from 'react-moralis';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -10,9 +10,9 @@ import { SearchSounds } from './Views/SearchSojis';
 
 
 const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
+    palette: {
+        mode: 'dark',
+    },
 });
 
 
@@ -31,26 +31,27 @@ const darkTheme = createTheme({
 
 function App() {
 
-  return <Provider store={store}>
-    <BrowserRouter>
-      {/* <MoralisProvider initializeOnMount={false}> */}
-        <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-          <Container style={{
-            width: "100%",
-            height: "100%",
-          }}>
-            <ElevatedAppBar />
-            <Routes>
-              <Route path="/" element={<></>}></Route>
-              <Route path="/uploadSound" element={<UploadSoji />} ></Route>
-            </Routes>
-            <SearchSounds />
-          </Container>
-        </ThemeProvider>
-      {/* </MoralisProvider> */}
-    </BrowserRouter>
-  </Provider>
+  
+    return <Provider store={store}>
+        <BrowserRouter>
+            {/* <MoralisProvider initializeOnMount={false}> */}
+            <ThemeProvider theme={darkTheme}>
+                <CssBaseline />
+                <Container style={{
+                    width: "100%",
+                    height: "100%",
+                }}>
+                    <ElevatedAppBar />
+                    <Routes>
+                        <Route path="/" element={<></>}></Route>
+                        <Route path="/uploadSound" element={<UploadSoji />} ></Route>
+                    </Routes>
+                    <SearchSounds />
+                </Container>
+            </ThemeProvider>
+            {/* </MoralisProvider> */}
+        </BrowserRouter>
+    </Provider>
 }
 
 export default App;

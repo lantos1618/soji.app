@@ -26,7 +26,13 @@ describe("SojiNFT", function () {
         await sojiNFT.deployed();
 
         const mintTx = await sojiNFT.mintSpecialSOJI(
+            "Darling",
+            "zerotwo says darling",
+            "ipfs://QmVVPeKMwWv4iUzzGvZRyLi5D5qBjsw6oHuYwwc6WbWfBZ",
+            "ipfs://QmPnXjkAz28XwihzCuJRWw7r2cF89hzRTfTu69WpkK6fn7",
+            "['darling', 'zerotwo']"
 
-        )
-    )
+        );
+        
+    })
 });

@@ -4,7 +4,6 @@ import { SojiSearchResults } from "../components/Soji/SojiSearchResults";
 import { useEffect, useState } from "react";
 
 export function SearchSounds() {
-    // @ts-ignore params not passed execution only
 
 
     return <Container style={{ paddingTop: "50px" }}>
