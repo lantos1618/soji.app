@@ -2,11 +2,15 @@ import { Container, Grid } from '@mui/material';
 import React, { useRef } from 'react';
 import useSound from 'use-sound';
 import { useHover } from 'usehooks-ts';
-import { SojiItemProps } from './sojiData';
+import { Soji } from './UploadSojiService';
+// import { SojiItemProps } from './sojiData';
 
-export function SojiItem(props: SojiItemProps) {
-    const { name: title, emoji, src } = props;
-    const [play] = useSound(src);
+
+
+
+export function SojiItem(props: Soji) {
+    const { name, image, animation_url } = props;
+    const [play] = useSound(animation_url);
     const hoverRef = useRef(null);
     const isHover = useHover(hoverRef);
 
@@ -26,8 +30,8 @@ export function SojiItem(props: SojiItemProps) {
             color: "white",
             borderRadius: "4px"
         }}>
-            <img src={emoji} alt={title} style={{ width: 30, height: 30 }} />
-            <span style={{ padding: 10 }}>{title}</span>
+            <img src={image} alt={name} style={{ width: 30, height: 30 }} />
+            <span style={{ padding: 10 }}>{name}</span>
         </Container>
     </Grid>;
 }

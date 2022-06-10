@@ -1,13 +1,9 @@
 
 import React from 'react';
 import { AppBar, Box, Button, Stack, Toolbar, Typography, useScrollTrigger } from '@mui/material';
-// import { ConnectButton } from 'web3uikit';
 import { SearchBox } from './Search/SearchBox';
 
 import { ethers } from 'ethers';
-import GreeterJSON from '../artifacts/contracts/Greeter.sol/Greeter.json'
-import { Greeter } from '../types/contracts/Greeter'
-
 import Web3Modal from "web3modal";
 
 
@@ -30,20 +26,9 @@ function ElevationScroll(props: ElevationScrollProps) {
 
 export default function ElevatedAppBar() {
 
-
-    const greeterAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
-
-
-
-
-    async function fetchGreeting() {
-
+    async function connectWeb3() {
         await window.ethereum.request({ method: "eth_requestAccounts" });
-
-      
     }
-
-
     return <>
         <ElevationScroll >
             <AppBar>
@@ -59,7 +44,7 @@ export default function ElevatedAppBar() {
                                 Soji 🍶🔊
                             </Typography>
                             {/* <ConnectButton moralisAuth={true} /> */}
-                            <Button onClick={fetchGreeting}> Connect </Button>
+                            <Button onClick={connectWeb3}> Connect </Button>
                         </Stack>
                         <SearchBox />
                     </Stack>

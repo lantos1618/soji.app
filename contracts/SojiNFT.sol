@@ -126,6 +126,19 @@ contract SojiNft is ERC721URIStorage, ChainlinkClient {
         return rarity;
     }
 
+
+    function mintSoji(
+        string memory tokenURI
+    ) public returns (uint256) {
+    
+        uint256 newItemId = s_tokenIds.current();
+        _safeMint(msg.sender, newItemId);
+        s_tokenIds.increment();    
+        _setTokenURI(newItemId, tokenURI);
+
+        return newItemId;
+    }
+
     // mints soji but will generate random special attributes
     function mintSpecialSOJI(
         // address owner,

@@ -10,7 +10,6 @@ export interface SojiItemProps extends SojiProps {
     spam: boolean
 }
 
-
 export interface SearchResultProps {
     sojis: Array<SojiProps>;
     // sojiCount: number;

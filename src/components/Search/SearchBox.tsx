@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../services/hooks';
-import { setSearchTerm } from './searchService';
+import { getSojis, setSearchTerm } from './searchService';
 
 
 export function SearchBox() {
@@ -14,6 +14,10 @@ export function SearchBox() {
     function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
        dispatch(setSearchTerm(e.target.value)) 
     }
+
+    useEffect(() => {
+        dispatch(getSojis())
+    }, [])
 
     return <Stack direction="row" spacing="2">
         <TextField

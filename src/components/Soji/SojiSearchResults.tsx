@@ -10,7 +10,7 @@ export function SojiSearchResults() {
 
     return <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={1} justifyContent={"space-between"}>
-            {search.sojisResults.map(soji => <SojiItem {...soji} key={soji.src} spam={true}></SojiItem>)}
+            {search.sojisResults.map(soji => <SojiItem key={soji.name} {...soji} />)}
         </Grid>
     </Box>
 
