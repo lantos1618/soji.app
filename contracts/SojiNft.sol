@@ -4,13 +4,22 @@ pragma solidity ^0.8.14;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 // import "@openzeppelin/contracts/access/Ownable.sol";
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
+
+
+// for chainlink reuqests
+import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+
+// for chainlink random
+import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
 error NotOwner();
 error NeedMoreGas();
 error IllegalAttemptToSetAttributes();
 
-contract SojiNft is ERC721URIStorage {
+contract SojiNft is ERC721URIStorage, ChainlinkClient {
     // Patrick. C example
     // {
     //     "name":"pug",
@@ -32,8 +41,36 @@ contract SojiNft is ERC721URIStorage {
     //     "animation_url": "ipfs://cid"
     // }
 
+
+
     using Counters for Counters.Counter;
     Counters.Counter private s_tokenIds;
+
+    using Chainlink for Chainlink.Request;
+
+    bytes32 private chainlink_jobId;
+    uint256 private chainlink_fee;
+
+    // enum Specials {
+    //     EPHEMERAL,
+    //     STAR,
+    //     PLATINUM,
+    //     GOLD,
+    //     SILVER,
+    //     RED,
+    //     BlUE 
+    // }
+
+    string[] public Rarity = [
+        "EPHEMERAL",
+        "STAR",
+        "PLATINUM",
+        "GOLD",
+        "SILVER",
+        "RED",
+        "BLUE"
+    ]; 
+
 
     string private s_unconfirmedTokenURIString;
 
@@ -81,6 +118,11 @@ contract SojiNft is ERC721URIStorage {
         return false;
     }
 
+    function randomRarity() internal returns (string memory) {
+        string memory rarity = Rarity[0];
+        return rarity;
+    }
+
     // mints soji but will generate random special attributes
     function mintSpecialSOJI(
         address owner,
@@ -103,7 +145,8 @@ contract SojiNft is ERC721URIStorage {
 
         // create tokenURI
         tokenURI = string.concat(
-            "{\"name\":\"",
+            "{",
+            "\"name\":\"",
             name,
             "\",\"description\":\"",
             description,
@@ -125,7 +168,15 @@ contract SojiNft is ERC721URIStorage {
 
         // create random attributes using chainlink VRF
 
-        
+        string memory i_randomRarity = randomRarity();
+
+        tokenURI = string.concat(
+            tokenURI,
+            "\",\"attributes\":[{\"trait_type\":\"Rarity\",\"value\": \"",
+            i_randomRarity,
+            "\"}]",
+            "}"
+        );
 
         return newItemId;
     }
