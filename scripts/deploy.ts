@@ -22,27 +22,27 @@ async function main() {
   await greeter.deployed();
   console.log("Greeter deployed to:", greeter.address);
 
-  const frontEndPath = "./frontend/src/contracts/Greeter/";
-  // const frontEndPath = "./decentralized_soji_frontend/src/contracts/Greeter/";
-  const frontEndFile = frontEndPath + contractName
+  // const frontEndPath = "./frontend/src/contracts/Greeter/";
+  // // const frontEndPath = "./decentralized_soji_frontend/src/contracts/Greeter/";
+  // const frontEndFile = frontEndPath + contractName
 
-  if (!fs.existsSync(frontEndPath)) {
-    fs.mkdirSync(frontEndPath);
-  }
+  // if (!fs.existsSync(frontEndPath)) {
+  //   fs.mkdirSync(frontEndPath);
+  // }
 
-  // write the contract address to the front end
-  fs.writeFileSync(
-    frontEndFile + "_address.json",
-    JSON.stringify({ address: greeter.address }, undefined, 2)
-  );
+  // // write the contract address to the front end
+  // fs.writeFileSync(
+  //   frontEndFile + "_address.json",
+  //   JSON.stringify({ address: greeter.address }, undefined, 2)
+  // );
 
-  // write the contract abi to the front end
-  const artifact = await artifacts.readArtifact(contractName);
+  // // write the contract abi to the front end
+  // const artifact = await artifacts.readArtifact(contractName);
 
-  fs.writeFileSync(
-    frontEndFile + ".json",
-    JSON.stringify(artifact, undefined, 2)
-  )
+  // fs.writeFileSync(
+  //   frontEndFile + ".json",
+  //   JSON.stringify(artifact, undefined, 2)
+  // )
 
 
 

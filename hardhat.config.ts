@@ -3,11 +3,22 @@ import * as dotenv from "dotenv";
 import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
-import "@typechain/hardhat";
+
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+
+import "hardhat-deploy";
+import "@symfoni/hardhat-react";
+
+
+import "@typechain/hardhat";
+import "@typechain/ethers-v5";
+
+
+
 // added openzeppelin
 require('@openzeppelin/hardhat-upgrades');
+
 
 
 dotenv.config();
