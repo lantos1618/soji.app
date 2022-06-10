@@ -31,7 +31,7 @@ const initialState: SearchState = {
 
 
 export const getSojis = createAsyncThunk('search/getSojis', async () => {
-   return await asyncGetSojis()
+    return await asyncGetSojis()
 })
 
 async function asyncGetSojis() {
@@ -68,8 +68,20 @@ async function asyncGetSojis() {
             console.warn("Error: ", err)
         }
     }
-    return sojis 
+    return sojis
 }
+
+// filter sojis based on search term
+function filterSojis(sojis: Soji[], searchTerm: string) {
+    return sojis.filter(soji => {
+        return (
+            soji.name.toLowerCase().includes(searchTerm) ||
+            (soji.description || "").toLowerCase().includes(searchTerm) ||
+            (soji.tags || []).some(tag => tag.toLowerCase().includes(searchTerm))
+        );
+    });
+}
+
 
 
 // create the search slice
@@ -79,16 +91,7 @@ const searchSlice = createSlice({
     reducers: {
         setSearchTerm: (state, action: PayloadAction<string>) => {
             state.searchTerm = action.payload.toLowerCase()
-            state.sojisResults = state.sojis.filter(soji => {
-                return (
-                    // yes I should search the terms before getting all the data!
-                    // requires some sort of cache, but yolo
-                    // lets get all sojis and then filter them!
-                    soji.name.toLowerCase().includes(state.searchTerm) ||
-                    (soji.description || "").toLowerCase().includes(state.searchTerm) ||
-                    (soji.tags || []).some(tag => tag.toLowerCase().includes(state.searchTerm))
-                )
-            })
+            state.sojisResults = filterSojis(state.sojis, state.searchTerm)
             return state
         }
     },
@@ -99,16 +102,7 @@ const searchSlice = createSlice({
         builder.addCase(getSojis.fulfilled, (state, action) => {
             console.info("getSojis fulfilled")
             state.sojis = action.payload
-            state.sojisResults = state.sojis.filter(soji => {
-                return (
-                    // yes I should search the terms before getting all the data!
-                    // requires some sort of cache, but yolo
-                    // lets get all sojis and then filter them!
-                    soji.name.toLowerCase().includes(state.searchTerm) ||
-                    (soji.description || "").toLowerCase().includes(state.searchTerm) ||
-                    (soji.tags || []).some(tag => tag.toLowerCase().includes(state.searchTerm))
-                )
-            })
+            state.sojisResults = filterSojis(state.sojis, state.searchTerm)
             return state
         })
     }
