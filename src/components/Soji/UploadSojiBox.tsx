@@ -38,7 +38,6 @@ function TextFrom() {
     const dispatch = useAppDispatch();
     // handel text field change
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        console.warn(e.target.name)
         if (e.target.name == "tags") {
             dispatch(setSojiFileToUpload({ ...sojiFileToUpload,
                  tags: e.target.value.split(/\s|\,/).filter(str => str.trim()) }));
@@ -100,8 +99,6 @@ function SojiDropZone() {
         </Stack>
     </Container>;
 }
-
-
 
 export default function UploadSoji() {
 

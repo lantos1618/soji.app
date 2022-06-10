@@ -40,28 +40,7 @@ export default function ElevatedAppBar() {
 
         await window.ethereum.request({ method: "eth_requestAccounts" });
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-
-        console.info("signer", signer);
-
-        // todo: Make this look nice!
-        
-        if (typeof window.ethereum !== 'undefined') {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            console.log({ provider })
-            const contract = new ethers.Contract(greeterAddress, GreeterJSON.abi, provider) as Greeter
-            const contractWithSigner = await contract.connect(signer)
-            try {
-                const transaction = await contractWithSigner.setGreeting("Hello, " + await signer.getAddress());
-                console.info( "setGreeting transaction", await transaction.wait())
-                const data = await contract.greet()
-
-                console.log('data: ', data)
-            } catch (err) {
-                console.log("Error: ", err)
-            }
-        }
+      
     }
 
 

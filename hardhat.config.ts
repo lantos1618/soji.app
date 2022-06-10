@@ -49,12 +49,12 @@ export default <HardhatUserConfig>{
   networks: {
     hardhat:{
       chainId: 1337,
-      // accounts: [
-      //   {
-      //     privateKey: process.env.PRIVATE_KEY,
-      //     balance: "100000000000000000000"
-      //   }
-      // ]
+      accounts: [
+        {
+          privateKey: process.env.PRIVATE_KEY,
+          balance: "100000000000000000000000000"
+        }
+      ]
     },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
