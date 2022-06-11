@@ -6,8 +6,6 @@ import { Soji } from './UploadSojiService';
 // import { SojiItemProps } from './sojiData';
 
 
-
-
 export function SojiItem(props: Soji) {
     const { name, image, animation_url } = props;
     const [play] = useSound(animation_url);

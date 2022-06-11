@@ -6,9 +6,12 @@ import { IFPSSingleton } from "../../services/IFPSSingleton";
 import { RootState } from "../../services/store";
 import { ToBase64 } from "../../services/utils";
 
-import sojiNftAddress from "../../artifacts/contracts/SojiNFT.sol/SojiNFTAddress.json"
+import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
+
+
+// TODO: find a better home for this
 
 export interface Soji {
     name: string;
@@ -81,6 +84,8 @@ async function addSojiToIPFS(uploadSojiState: UploadSojiState) {
         throw new Error("Soji is not valid");
     }
     const { name, description, imageBase64, audioBase64, tags } = uploadSojiState.sojiFileToUpload;
+
+    // TODO: find a pinning service for ipfs
     const ipfs = await IFPSSingleton.getInstance();
     const imageHash = await ipfs.add(imageBase64!);
     console.info("imageHash:", imageHash);
@@ -90,8 +95,6 @@ async function addSojiToIPFS(uploadSojiState: UploadSojiState) {
     const soji: Soji = {
         name,
         description,
-        // image: "https://ipfs.io/ipfs/" + imageHash.cid.toString(),
-        // animation_url: "https://ipfs.io/ipfs/" + audioHash.cid.toString(),
         image: "ipfs://" + imageHash.cid.toString(),
         animation_url: "ipfs://" + audioHash.cid.toString(),
         tags
@@ -110,10 +113,9 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
     async (uploadSojiState: UploadSojiState) => {
         // check validation on sojiFileToUpload
         // this validation pattern needs to be redone...
-
         const { sojiHashString, soji } = await addSojiToIPFS(uploadSojiState)
 
-
+        // ether.js need to move to a service?
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner()
@@ -128,6 +130,7 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
                 const transaction = await contractWithSigner.mintSoji(
                     "ipfs://" + sojiHashString
                 )
+                // TODO: make this a special soji
                 // const transaction = await contractWithSigner.mintSpecialSOJI(
                 //     soji.name,
                 //     soji.description,
@@ -173,6 +176,7 @@ const uploadSojiSlice = createSlice({
         builder.addCase(fileToBase64.fulfilled, (state, action) => {
             console.info("FileToBase64.fulfilled", action.payload)
 
+            // TODO: make this look nice
             if (action.payload.key === "imageFile") {
                 state.sojiFileToUpload.imageFile = action.payload.file;
                 state.sojiFileToUpload.imageBase64 = action.payload.base64;

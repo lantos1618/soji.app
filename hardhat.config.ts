@@ -1,12 +1,9 @@
 import * as dotenv from "dotenv";
 
 import { HardhatUserConfig } from "hardhat/types";
-
 import { task } from "hardhat/config";
 
-
 import '@typechain/hardhat'
-
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import "@nomiclabs/hardhat-etherscan";
@@ -30,24 +27,17 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
-export default <HardhatUserConfig>{ 
+export default <HardhatUserConfig>{
   solidity: "0.8.14",
   paths: {
     artifacts: "./src/artifacts",
-    
+
   },
   typechain: {
     outDir: "./src/types",
-    // target: "ethers",
-    // language: "typescript",
-    // compiler: "@nomiclabs/hardhat-ethers",
-    // version: "0.6.0",
-    // clean: true,
-    // useDefaults: true,
-
   },
   networks: {
-    hardhat:{
+    hardhat: {
       chainId: 1337,
       accounts: [
         {
@@ -61,6 +51,16 @@ export default <HardhatUserConfig>{
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    rinkeby: {
+      url: process.env.RINKEBY_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    goerli: {
+      url: process.env.GOERLI_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
@@ -68,4 +68,5 @@ export default <HardhatUserConfig>{
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
-  },};
+  }
+};

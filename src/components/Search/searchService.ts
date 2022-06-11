@@ -3,19 +3,14 @@ import { BigNumber, ethers } from 'ethers';
 import type { RootState, AppDispatch } from '../../services/store'
 // import { sojiData, SojiProps } from '../Soji/sojiData';
 
-import sojiNftAddress from "../../artifacts/contracts/SojiNFT.sol/SojiNFTAddress.json"
+import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
 import { Soji } from '../Soji/UploadSojiService';
-import { ConstructionOutlined } from '@mui/icons-material';
 
 // define a interface of the search state
 export interface SearchState {
     searchTerm: string
-    // TODO: replace this with contract search results
-    // sojis: Array<SojiProps>;
-    // sojisResults: Array<SojiProps>;
-
     sojis: Array<Soji>;
     sojisResults: Array<Soji>;
 }
@@ -23,27 +18,18 @@ export interface SearchState {
 // define the initial state of the search state
 const initialState: SearchState = {
     searchTerm: '',
-    // sojis: sojiData,
-    // sojisResults: sojiData
     sojis: [],
     sojisResults: []
 }
 
 
 export const getSojis = createAsyncThunk('search/getSojis', async () => {
-    return await asyncGetSojis()
-})
-
-async function asyncGetSojis() {
-    const sojis: Soji[] = []
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner()
-
+    
+    const sojis: Soji[] = []
     if (typeof window.ethereum !== 'undefined') {
         const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as SojiNft
-        // const signedContract = contract.connect(signer)
-
         try {
             const sojiCount = await contract.getSOJICount()
             const sojisStringPromise: Promise<string>[] = []
@@ -69,7 +55,8 @@ async function asyncGetSojis() {
         }
     }
     return sojis
-}
+})
+
 
 // filter sojis based on search term
 function filterSojis(sojis: Soji[], searchTerm: string) {

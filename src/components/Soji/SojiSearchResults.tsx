@@ -13,5 +13,4 @@ export function SojiSearchResults() {
             {search.sojisResults.map(soji => <SojiItem key={soji.name} {...soji} />)}
         </Grid>
     </Box>
-
 }
