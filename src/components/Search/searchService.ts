@@ -25,7 +25,6 @@ const initialState: SearchState = {
 
 export const getSojis = createAsyncThunk('search/getSojis', async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    await provider.send("eth_requestAccounts", []);
     
     const sojis: Soji[] = []
     if (typeof window.ethereum !== 'undefined') {

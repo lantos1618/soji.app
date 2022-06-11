@@ -1,6 +1,13 @@
 const webpack = require('webpack');
 
-module.exports = function override(config) {
+const {
+    override,
+    addBabelPlugins,
+  } = require("customize-cra")
+
+// bug fix
+function web3BugFix(config) {
+
     const fallback = config.resolve.fallback || {};
     Object.assign(fallback, {
         "crypto": require.resolve("crypto-browserify"),
@@ -17,6 +24,12 @@ module.exports = function override(config) {
             process: 'process/browser',
             Buffer: ['buffer', 'Buffer']
         })
+
     ])
     return config;
+}
+
+module.exports = function (config){
+    return web3BugFix(config)
+    // return override(addBabelPlugins("@babel/plugin-syntax-bigint"))(web3BugFix(config))
 }

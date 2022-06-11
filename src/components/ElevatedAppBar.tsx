@@ -27,7 +27,7 @@ function ElevationScroll(props: ElevationScrollProps) {
 export default function ElevatedAppBar() {
 
     async function connectWeb3() {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
+        await window.ethereum.send("eth_requestAccounts", []);
     }
     return <>
         <ElevationScroll >
