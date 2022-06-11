@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { BigNumber, ethers } from 'ethers';
-import type { RootState, AppDispatch } from '../../services/store'
+import { ethers } from 'ethers';
+import type { RootState } from '../../services/store'
 // import { sojiData, SojiProps } from '../Soji/sojiData';
 
 import sojiNftAddress from "../../contracts/SojiNFTAddress.json";

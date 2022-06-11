@@ -40,8 +40,8 @@ export default <HardhatUserConfig>{
     hardhat: {
       chainId: 1337,
       accounts: [
-        {
-          privateKey: process.env.PRIVATE_KEY,
+        process.env.PRIVATE_KEY && {
+          privateKey: process.env.PRIVATE_KEY ,
           balance: "100000000000000000000000000"
         }
       ]
