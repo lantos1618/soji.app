@@ -15,6 +15,9 @@ import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
+
+import "hardhat/console.sol";
+
 error NotOwner();
 error NeedMoreGas();
 error IllegalAttemptToSetAttributes();
@@ -74,10 +77,8 @@ contract SojiNft is ERC721URIStorage, ChainlinkClient {
 
     string private s_unconfirmedTokenURIString;
 
-
     constructor() ERC721("sojiNFT", "SOJI") {}
-
-
+    
     // a function that checks a string contains a given string and returns true if it does
     // convert strings to bytes
     // set index i to 0 then check if next window of haystack is same as needle word 
@@ -123,17 +124,32 @@ contract SojiNft is ERC721URIStorage, ChainlinkClient {
         return rarity;
     }
 
+
+    function mintSoji(
+        string memory tokenURI
+    ) public returns (uint256) {
+    
+        uint256 newItemId = s_tokenIds.current();
+        _safeMint(msg.sender, newItemId);
+        s_tokenIds.increment();    
+        _setTokenURI(newItemId, tokenURI);
+
+        return newItemId;
+    }
+
     // mints soji but will generate random special attributes
     function mintSpecialSOJI(
-        address owner,
+        // address owner,
         string memory name,
         string memory description,
         string memory image,
         string memory animation_url,
         string memory tags
     ) public returns (uint256) {
+
         uint256 newItemId = s_tokenIds.current();
-        _safeMint(owner, newItemId);
+
+        _safeMint(msg.sender, newItemId);
         s_tokenIds.increment();
         string memory tokenURI;
 
