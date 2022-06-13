@@ -27,15 +27,20 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
-function getHardHatAccounts() {
+function getHardhatConfig() {
   if (process.env.PRIVATE_KEY === undefined) {
-    return [];
-  }
-  return [{
-      privateKey: process.env.PRIVATE_KEY ,
-      balance: "100000000000000000000000000"
+    console.info("Please set the PRIVATE_KEY environment variable");
+    return {
+      chainId: 1337,
     }
-  ]
+  }
+  return {
+    chainId: 1337,
+    accounts: [{
+      privateKey: process.env.PRIVATE_KEY,
+      balance: "100000000000000000000000000"
+    }]
+  }
 }
 
 export default <HardhatUserConfig>{
@@ -48,10 +53,7 @@ export default <HardhatUserConfig>{
     outDir: "./src/types",
   },
   networks: {
-    hardhat: {
-      chainId: 1337,
-      accounts: getHardHatAccounts(),
-    },
+    hardhat: getHardhatConfig(),
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:

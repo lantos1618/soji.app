@@ -6,7 +6,7 @@ import type { RootState } from '../../services/store'
 import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
-import { Soji } from '../Soji/UploadSojiService';
+import { Soji } from '../Soji/uploadSojiService';
 
 // define a interface of the search state
 export interface SearchState {
@@ -24,29 +24,39 @@ const initialState: SearchState = {
 
 
 export const getSojis = createAsyncThunk('search/getSojis', async () => {
+    const ipfsBaseURI = "ipfs://";
+    const ipfsURI = "https://ipfs.io/ipfs/";
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    
     const sojis: Soji[] = []
+
     if (typeof window.ethereum !== 'undefined') {
         const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as SojiNft
         try {
             const sojiCount = await contract.getSOJICount()
             const sojisStringPromise: Promise<string>[] = []
+
+
             for (let i = 0; i < sojiCount.toNumber(); i++) {
                 sojisStringPromise.push(contract.tokenURI(ethers.BigNumber.from(i)))
             }
             const sojisStrings = await Promise.all(sojisStringPromise)
 
+            console.info("fetching sojis from contract", sojisStrings)
             for (let i = 0; i < sojisStrings.length; i++) {
-                console.info(sojisStrings[i].replace("ipfs://", "https://ipfs.io/ipfs/"))
+                console.info(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
                 // const soji: Soji = await fetch(
                 //     sojisStrings[i].replace("ipfs://", "ipfs.io/ipfs/")).then(res => res.json())
-                const res = await fetch(sojisStrings[i].replace("ipfs://", "https://ipfs.io/ipfs/"))
+                const res = await fetch(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
+                
                 const soji: Soji = await res.json()
-                soji.image = await (await fetch(soji.image.replace("ipfs://", "https://ipfs.io/ipfs/"))).text()
-                soji.animation_url = await (await fetch(soji.animation_url.replace("ipfs://", "https://ipfs.io/ipfs/"))).text()
+
+                // soji.image = await (await fetch(soji.image.replace(ipfsBaseURI, ipfsURI))).text()
+                // soji.animation_url = await (await fetch(soji.animation_url.replace(ipfsBaseURI, ipfsURI))).text()
+                soji.image = soji.image.replace(ipfsBaseURI, ipfsURI)
+                soji.animation_url = soji.animation_url.replace(ipfsBaseURI, ipfsURI)
 
                 console.info("soji:", soji)
+
                 sojis.push(soji)
             }
         } catch (err) {

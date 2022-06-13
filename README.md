@@ -1,3 +1,21 @@
+# todos
+
+- [ ] solidity soji nft
+- [ ] solidity soji special nft
+- [ ] ethers connect
+- [ ] CI
+- [ ] fuzzing
+- [ ] update logged in
+- [ ] redux
+- [ ] move soji fetch to individual item
+- [ ] add web3modal
+- [ ] move contract from react to redux
+- [ ] make ui prettier
+- [ ] make some info about the app
+- [ ] need to work out how to index to ::wakuwaku::
+- [ ] upload buf not base64(buf) to ipfs
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

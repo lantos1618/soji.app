@@ -1,20 +1,19 @@
 import { Container, Grid } from '@mui/material';
-import React, { useRef } from 'react';
-import useSound from 'use-sound';
+import { useRef } from 'react';
 import { useHover } from 'usehooks-ts';
-import { Soji } from './UploadSojiService';
-// import { SojiItemProps } from './sojiData';
+import { Soji } from './uploadSojiService';
 
 
 export function SojiItem(props: Soji) {
     const { name, image, animation_url } = props;
-    const [play] = useSound(animation_url);
+    const audio = new Audio(animation_url);
+    
     const hoverRef = useRef(null);
     const isHover = useHover(hoverRef);
 
     return <Grid item
         ref={hoverRef}
-        onClick={() => { play(); }}
+        onClick={() => { audio.play(); }}
     >
         <Container style={{
             display: "flex",

@@ -77,10 +77,8 @@ contract SojiNft is ERC721URIStorage, ChainlinkClient {
 
     string private s_unconfirmedTokenURIString;
 
-
     constructor() ERC721("sojiNFT", "SOJI") {}
-
-
+    
     // a function that checks a string contains a given string and returns true if it does
     // convert strings to bytes
     // set index i to 0 then check if next window of haystack is same as needle word 

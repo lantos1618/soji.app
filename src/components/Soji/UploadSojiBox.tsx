@@ -1,15 +1,14 @@
 import { Box, Button, Container, Grid, Stack, TextField, Tooltip, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
 import { DropEvent, FileRejection, useDropzone } from "react-dropzone";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 // import { useMoralis, useWeb3Contract } from "react-moralis"
 import { useAppDispatch, useAppSelector } from "../../services/hooks";
-import { fileToBase64, setSojiFileToUpload, submitSoji } from "./UploadSojiService";
+import { setFileData, setSojiFileToUpload, submitSoji } from "./uploadSojiService";
 
-function MediaPreview({ image, audio }: {
-    image: string | File | undefined, audio: string | File | undefined
+function MediaPreview({ name, image, audio }: {
+    name: string, image: string | File | undefined, audio: string | File | undefined
 }) {
 
     return <Grid item xs={5}>
@@ -23,7 +22,7 @@ function MediaPreview({ image, audio }: {
             justifyItems={"center"}
         >
             {image ?
-                <img style={{ width: "100px", height: "100px" }} src={image instanceof File ? URL.createObjectURL(image) : image} /> :
+                <img alt={name} style={{ width: "100px", height: "100px" }} src={image instanceof File ? URL.createObjectURL(image) : image} /> :
                 <Box style={{ width: "100px", height: "100px", justifyContent: "center", alignItems: "center", display: "flex" }}><QuestionMarkIcon /></Box>}
 
             {audio ?
@@ -38,7 +37,7 @@ function TextFrom() {
     const dispatch = useAppDispatch();
     // handel text field change
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        if (e.target.name == "tags") {
+        if (e.target.name === "tags") {
             dispatch(setSojiFileToUpload({ ...sojiFileToUpload,
                  tags: e.target.value.split(/\s|\,/).filter(str => str.trim()) }));
             return
@@ -65,10 +64,10 @@ function SojiDropZone() {
         event: DropEvent) {
         acceptedFiles.forEach(file => {
             if (file.type.includes("image")) {
-                dispatch(fileToBase64({ key: "imageFile", file }));
+                dispatch(setFileData({ key: "imageFile", file }));
             }
             if (file.type.includes("audio")) {
-                dispatch(fileToBase64({ key: "audioFile", file }));
+                dispatch(setFileData({ key: "audioFile", file }));
             }
         })
     }
@@ -121,7 +120,7 @@ export default function UploadSoji() {
         <Stack spacing={1}>
             <Grid container spacing={1}>
                 <TextFrom />
-                <MediaPreview image={sojiFileToUpload.imageBase64} audio={sojiFileToUpload.audioBase64} />
+                <MediaPreview name={sojiFileToUpload.name} image={sojiFileToUpload.imageBase64} audio={sojiFileToUpload.audioBase64} />
             </Grid>
             <SojiDropZone />
             <Button variant="outlined" onClick={submitHandle}>Submit</Button>

@@ -1,6 +1,5 @@
 
-import { Button, Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-// import { MoralisProvider } from 'react-moralis';
+import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ElevatedAppBar from './components/ElevatedAppBar';
@@ -17,7 +16,6 @@ const darkTheme = createTheme({
 
 
 // this app entry is not the best just throwing things together to get a prototype...
-// Router -> Moralis -> MUIThemes
 // App
 //   Main
 //     App bar
@@ -27,14 +25,21 @@ const darkTheme = createTheme({
 //       Upload
 //     Results
 
+// App Loaded
+// getSojis()
+//     for each soji
+//      Load soji from IPFS
+//      Render soji
+// userChanges opens Soji upload
+//     onChange -> dispatch -> update State
+//     onChange(image | audio) -> dispatch -> readFileData -> update State
+//     onSubmit -> dispatch -> uploadToIPFS -> initiateContract
+
 
 
 function App() {
-
-  
     return <Provider store={store}>
         <BrowserRouter>
-            {/* <MoralisProvider initializeOnMount={false}> */}
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
                 <Container style={{
@@ -49,7 +54,6 @@ function App() {
                     <SearchSounds />
                 </Container>
             </ThemeProvider>
-            {/* </MoralisProvider> */}
         </BrowserRouter>
     </Provider>
 }

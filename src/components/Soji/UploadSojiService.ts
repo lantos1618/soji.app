@@ -4,11 +4,12 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ethers } from "ethers";
 import { IFPSSingleton } from "../../services/IFPSSingleton";
 import { RootState } from "../../services/store";
-import { ToBase64 } from "../../services/utils";
+import { toBase64, toBuffer } from "../../services/utils";
 
 import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
+import { Blob } from "buffer";
 
 
 // TODO: find a better home for this
@@ -27,10 +28,16 @@ export interface SojiFileToUpload extends Soji {
     imageFile?: File;
     // the image base64 to be used in previews
     imageBase64?: string;
-    // the animation file
+    // the image buffer
+    imageBuffer?: ArrayBuffer;
+
+    // audioFile => animation_url
     audioFile?: File;
+    // the audio buffer
+    audioBuffer?: ArrayBuffer;
     // the audio base64 to be used in previews
     audioBase64?: string;
+
 }
 
 // define a upload soji state
@@ -69,11 +76,13 @@ const initialState: UploadSojiState = {
 
 
 // create async redux thunk to set image from file using ToBase64
-export const fileToBase64 = createAsyncThunk<{ key: "imageFile" | "audioFile", file: File, base64: string }, { key: "imageFile" | "audioFile", file: File }>(
-    "uploadSoji/setFileFromBase64",
+export const setFileData = createAsyncThunk<{ key: "imageFile" | "audioFile", file: File, base64: string, buffer: ArrayBuffer }, { key: "imageFile" | "audioFile", file: File }>(
+
+    "uploadSoji/setFileData",
     async ({ key, file }: { key: "imageFile" | "audioFile", file: File }) => {
-        const base64 = await ToBase64(file);
-        return { key, file, base64 };
+        const base64 = await toBase64(file);
+        const buffer = await toBuffer(file);
+        return { key, file, base64, buffer };
     }
 );
 
@@ -83,14 +92,28 @@ async function addSojiToIPFS(uploadSojiState: UploadSojiState) {
     if (!validation.name || !validation.description || !validation.image || !validation.animation_url || !validation.tags || !validation.imageFile || !validation.audioFile) {
         throw new Error("Soji is not valid");
     }
-    const { name, description, imageBase64, audioBase64, tags } = uploadSojiState.sojiFileToUpload;
+    const { name, description, imageBuffer, audioBuffer, tags } = uploadSojiState.sojiFileToUpload;
+
+    if (!imageBuffer) {
+        throw "Image file is not set";
+    }
+    if (!audioBuffer) {
+        throw "Audio file is not set";
+    }
+
 
     // TODO: find a pinning service for ipfs
+    // TODO: handle errors
     const ipfs = await IFPSSingleton.getInstance();
-    const imageHash = await ipfs.add(imageBase64!);
+
+    const imageHash = await ipfs.add(imageBuffer);
+    console.info("image pinned at", await ipfs.pin.add(imageHash.cid))
+
     console.info("imageHash:", imageHash);
-    const audioHash = await ipfs.add(audioBase64!);
+    const audioHash = await ipfs.add(audioBuffer!);
+
     console.info("audioHash:", audioHash);
+    console.info("audio pinned at", await ipfs.pin.add(audioHash.cid))
 
     const soji: Soji = {
         name,
@@ -100,8 +123,10 @@ async function addSojiToIPFS(uploadSojiState: UploadSojiState) {
         tags
     };
     const sojiHash = await ipfs.add(JSON.stringify(soji));
+    console.info(await ipfs.pin.add(sojiHash.cid))
+    console.info("soji pinned at", await ipfs.pin.add(audioHash.cid))
 
-    console.info("soji submited to ipfs", sojiHash, soji);
+    console.info("soji submitted to ipfs", sojiHash, soji);
     const sojiHashString = sojiHash.cid.toString();
     return { sojiHashString, soji };
 }
@@ -151,7 +176,7 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
 // create special soji
 export const createSoji = createAsyncThunk<void, UploadSojiState>(
     "uploadSoji/createSoji",
-    async (uploadSojiState: UploadSojiState) => {
+    async () => {
         // run contract
         // then confirm contract
     }
@@ -173,13 +198,13 @@ const uploadSojiSlice = createSlice({
     },
     extraReducers: (builder) => {
         // this throws a non-serializable error but is okay because the design of the slice is to not serialize file into the state 
-        builder.addCase(fileToBase64.fulfilled, (state, action) => {
-            console.info("FileToBase64.fulfilled", action.payload)
-
+        builder.addCase(setFileData.fulfilled, (state, action) => {
+            console.info("setFileData.fulfilled", action.payload)
             // TODO: make this look nice
             if (action.payload.key === "imageFile") {
                 state.sojiFileToUpload.imageFile = action.payload.file;
                 state.sojiFileToUpload.imageBase64 = action.payload.base64;
+                state.sojiFileToUpload.imageBuffer = action.payload.buffer;
                 state.validation.image = true
                 state.validation.imageFile = true
             }
@@ -187,6 +212,7 @@ const uploadSojiSlice = createSlice({
             if (action.payload.key === "audioFile") {
                 state.sojiFileToUpload.audioFile = action.payload.file;
                 state.sojiFileToUpload.audioBase64 = action.payload.base64;
+                state.sojiFileToUpload.audioBuffer = action.payload.buffer;
                 state.validation.animation_url = true
                 state.validation.audioFile = true
             }
