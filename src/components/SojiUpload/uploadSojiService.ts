@@ -9,18 +9,11 @@ import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
 import { Moralis } from "moralis"
+import { Soji } from "../Soji/soji";
 
 // TODO: find a better home for this
 
-export interface Soji {
-    name: string;
-    description: string;
-    // the image IPFS URL
-    image: string;
-    // the audio IPFS URL
-    animation_url: string;
-    tags: string[];
-}
+
 export interface SojiFileToUpload extends Soji {
     // the image file
     imageFile?: File;
@@ -138,7 +131,6 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
         // this validation pattern needs to be redone...
         const { sojiHashString, soji } = await addSojiToIPFS(uploadSojiState)
         const ethers = Moralis.web3Library;
-        // ether.js need to move to a service?
         // const provider = new ethers.providers.Web3Provider(window.ethereum)
         const provider = await Moralis.enableWeb3();
         const signer = provider.getSigner()
@@ -161,6 +153,7 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
                 //     soji.animation_url!,
                 //     JSON.stringify(soji.tags),
                 // )
+                await transaction.wait()
                 // console.info("setGreeting transaction", await transaction)
 
             } catch (err) {

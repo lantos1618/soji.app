@@ -2,7 +2,7 @@
 
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { searchReducer } from '../components/Search/searchService';
-import { uploadSojiReducer } from '../components/Soji/uploadSojiService';
+import { uploadSojiReducer } from '../components/SojiUpload/uploadSojiService';
 
 
 

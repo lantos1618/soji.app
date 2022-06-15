@@ -1,7 +1,7 @@
 import { Box, Grid } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '../../services/hooks';
-import { SojiItem } from './SojiItem';
+import { SojiItem } from '../Soji/SojiItem';
 
 
 

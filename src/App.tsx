@@ -4,7 +4,7 @@ import { MoralisProvider } from 'react-moralis';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ElevatedAppBar from './components/ElevatedAppBar';
-import UploadSoji from './components/Soji/UploadSojiBox';
+import UploadSoji from './components/SojiUpload/UploadSojiBox';
 import { store } from './services/store';
 import { SearchSounds } from './Views/SearchSojis';
 

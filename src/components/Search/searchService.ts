@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ethers } from 'ethers';
 import type { RootState } from '../../services/store'
+
 // import { sojiData, SojiProps } from '../Soji/sojiData';
 
 import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
-import { Soji } from '../Soji/uploadSojiService';
+
+import {Moralis} from "moralis"
+import { Soji } from '../Soji/soji';
 
 // define a interface of the search state
 export interface SearchState {
@@ -26,11 +28,13 @@ const initialState: SearchState = {
 export const getSojis = createAsyncThunk('search/getSojis', async () => {
     const ipfsBaseURI = "ipfs://";
     const ipfsURI = "https://ipfs.io/ipfs/";
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const ethers = Moralis.web3Library;
+    // const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const provider = await Moralis.enableWeb3();
     const sojis: Soji[] = []
 
-    if (typeof window.ethereum !== 'undefined') {
-        const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as SojiNft
+    if (Moralis.isWeb3Enabled()) {
+        const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as any as SojiNft
         try {
             const sojiCount = await contract.getSOJICount()
             const sojisStringPromise: Promise<string>[] = []
@@ -45,7 +49,6 @@ export const getSojis = createAsyncThunk('search/getSojis', async () => {
             for (let i = 0; i < sojisStrings.length; i++) {
                 // console.info(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
                 // const soji: Soji = await fetch(
-                //     sojisStrings[i].replace("ipfs://", "ipfs.io/ipfs/")).then(res => res.json())
                 const res = await fetch(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
                 
                 const soji: Soji = await res.json()

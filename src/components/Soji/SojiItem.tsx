@@ -1,7 +1,7 @@
 import { Container, Grid } from '@mui/material';
 import { useRef } from 'react';
 import { useHover } from 'usehooks-ts';
-import { Soji } from './uploadSojiService';
+import { Soji } from './soji';
 
 
 export function SojiItem(props: Soji) {
