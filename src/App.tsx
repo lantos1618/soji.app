@@ -1,5 +1,6 @@
 
 import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { MoralisProvider } from 'react-moralis';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ElevatedAppBar from './components/ElevatedAppBar';
@@ -44,22 +45,25 @@ declare global {
 
 function App() {
     return <Provider store={store}>
-        <BrowserRouter>
-            <ThemeProvider theme={darkTheme}>
-                <CssBaseline />
-                <Container style={{
-                    width: "100%",
-                    height: "100%",
-                }}>
-                    <ElevatedAppBar />
-                    <Routes>
-                        <Route path="/" element={<></>}></Route>
-                        <Route path="/uploadSound" element={<UploadSoji />} ></Route>
-                    </Routes>
-                    <SearchSounds />
-                </Container>
-            </ThemeProvider>
-        </BrowserRouter>
+        <MoralisProvider initializeOnMount={false}>
+            <BrowserRouter>
+                <ThemeProvider theme={darkTheme}>
+                    <CssBaseline />
+                    <Container style={{
+                        width: "100%",
+                        height: "100%",
+                    }}>
+                        <ElevatedAppBar />
+                        <Routes>
+                            <Route path="/" element={<></>}></Route>
+                            <Route path="/uploadSound" element={<UploadSoji />} ></Route>
+                        </Routes>
+                        <SearchSounds />
+                    </Container>
+                </ThemeProvider>
+            </BrowserRouter>
+        </MoralisProvider>
+
     </Provider>
 }
 

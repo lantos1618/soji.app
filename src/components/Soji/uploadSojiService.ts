@@ -1,7 +1,6 @@
 // I should move this to another file maybe use some sort of state management 
 
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ethers } from "ethers";
 import { IFPSSingleton } from "../../services/IFPSSingleton";
 import { RootState } from "../../services/store";
 import { toBase64, toBuffer } from "../../services/utils";
@@ -9,7 +8,7 @@ import { toBase64, toBuffer } from "../../services/utils";
 import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
-
+import { Moralis } from "moralis"
 
 // TODO: find a better home for this
 
@@ -106,13 +105,13 @@ async function addSojiToIPFS(uploadSojiState: UploadSojiState) {
     const ipfs = await IFPSSingleton.getInstance();
 
     const imageHash = await ipfs.add(imageBuffer);
-    console.info("image pinned at", await ipfs.pin.add(imageHash.cid))
+    // console.info("image pinned at", await ipfs.pin.add(imageHash.cid))
 
-    console.info("imageHash:", imageHash);
+    // console.info("imageHash:", imageHash);
     const audioHash = await ipfs.add(audioBuffer!);
 
-    console.info("audioHash:", audioHash);
-    console.info("audio pinned at", await ipfs.pin.add(audioHash.cid))
+    // console.info("audioHash:", audioHash);
+    // console.info("audio pinned at", await ipfs.pin.add(audioHash.cid))
 
     const soji: Soji = {
         name,
@@ -122,10 +121,10 @@ async function addSojiToIPFS(uploadSojiState: UploadSojiState) {
         tags
     };
     const sojiHash = await ipfs.add(JSON.stringify(soji));
-    console.info(await ipfs.pin.add(sojiHash.cid))
-    console.info("soji pinned at", await ipfs.pin.add(audioHash.cid))
+    // console.info(await ipfs.pin.add(sojiHash.cid))
+    // console.info("soji pinned at", await ipfs.pin.add(audioHash.cid))
 
-    console.info("soji submitted to ipfs", sojiHash, soji);
+    // console.info("soji submitted to ipfs", sojiHash, soji);
     const sojiHashString = sojiHash.cid.toString();
     return { sojiHashString, soji };
 }
@@ -138,19 +137,19 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
         // check validation on sojiFileToUpload
         // this validation pattern needs to be redone...
         const { sojiHashString, soji } = await addSojiToIPFS(uploadSojiState)
-
+        const ethers = Moralis.web3Library;
         // ether.js need to move to a service?
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        await provider.send("eth_requestAccounts", []);
+        // const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const provider = await Moralis.enableWeb3();
         const signer = provider.getSigner()
 
-        if (typeof window.ethereum !== 'undefined') {
-            const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as SojiNft
+        if (Moralis.isWeb3Enabled()) {
+            const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as any as SojiNft
             const contractWithSigner = await contract.connect(signer)
-            console.info("contractWithSigner:", contractWithSigner)
+            // console.info("contractWithSigner:", contractWithSigner)
 
             try {
-                console.info("uploading soji to chain", soji)
+                // console.info("uploading soji to chain", soji)
                 const transaction = await contractWithSigner.mintSoji(
                     "ipfs://" + sojiHashString
                 )
@@ -162,10 +161,10 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
                 //     soji.animation_url!,
                 //     JSON.stringify(soji.tags),
                 // )
-                console.info("setGreeting transaction", await transaction)
+                // console.info("setGreeting transaction", await transaction)
 
             } catch (err) {
-                console.warn("Error: ", err)
+                // console.warn("Error: ", err)
             }
         }
         return { sojiHashString, soji }
@@ -198,7 +197,7 @@ const uploadSojiSlice = createSlice({
     extraReducers: (builder) => {
         // this throws a non-serializable error but is okay because the design of the slice is to not serialize file into the state 
         builder.addCase(setFileData.fulfilled, (state, action) => {
-            console.info("setFileData.fulfilled", action.payload)
+            // console.info("setFileData.fulfilled", action.payload)
             // TODO: make this look nice
             if (action.payload.key === "imageFile") {
                 state.sojiFileToUpload.imageFile = action.payload.file;
@@ -224,17 +223,17 @@ const uploadSojiSlice = createSlice({
         // fulfilled -> log maybe modal
         // error -> log maybe modal
         builder.addCase(submitSoji.pending, (state) => {
-            console.info("submitSoji.pending")
+            // console.info("submitSoji.pending")
             return state
         })
         builder.addCase(submitSoji.fulfilled, (state, action) => {
-            console.info("submitSoji.fulfilled", action.payload)
+            // console.info("submitSoji.fulfilled", action.payload)
             state.sojiFileToUpload.image = action.payload.soji.image
             state.sojiFileToUpload.animation_url = action.payload.soji.animation_url
             return state
         })
         builder.addCase(submitSoji.rejected, (state, action) => {
-            console.info("submitSoji.rejected", action.error)
+            // console.info("submitSoji.rejected", action.error)
             return state
         })
     }

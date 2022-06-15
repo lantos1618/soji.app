@@ -1,7 +1,9 @@
 
 import React from 'react';
-import { AppBar, Box, Button, Stack, Toolbar, Typography, useScrollTrigger } from '@mui/material';
+import { AppBar, Box, Stack, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 import { SearchBox } from './Search/SearchBox';
+import { Container } from '@mui/system';
+import { ConnectButton } from 'web3uikit';
 
 
 interface ElevationScrollProps {
@@ -23,9 +25,6 @@ function ElevationScroll(props: ElevationScrollProps) {
 
 export default function ElevatedAppBar() {
 
-    async function connectWeb3() {
-        await window.ethereum.send("eth_requestAccounts", []);
-    }
     return <>
         <ElevationScroll >
             <AppBar>
@@ -35,16 +34,18 @@ export default function ElevatedAppBar() {
                     justifyContent: "space-between",
                     alignItems: "center",
                 }}>
-                    <Stack width="100%" spacing={1}>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="h4" align={"center"} component="div">
-                                Soji 🍶🔊
-                            </Typography>
-                            {/* <ConnectButton moralisAuth={true} /> */}
-                            <Button onClick={connectWeb3}> Connect </Button>
+                    <Container>
+
+                        <Stack width="100%" spacing={1}>
+                            <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="h4" align={"center"} component="div">
+                                    Soji 🍶🔊
+                                </Typography>
+                                {/* <ConnectButton moralisAuth={true} /> */}
+                            </Stack>
+                            <SearchBox />
                         </Stack>
-                        <SearchBox />
-                    </Stack>
+                    </Container>
                 </Toolbar>
             </AppBar>
         </ElevationScroll>

@@ -41,9 +41,9 @@ export const getSojis = createAsyncThunk('search/getSojis', async () => {
             }
             const sojisStrings = await Promise.all(sojisStringPromise)
 
-            console.info("fetching sojis from contract", sojisStrings)
+            // console.info("fetching sojis from contract", sojisStrings)
             for (let i = 0; i < sojisStrings.length; i++) {
-                console.info(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
+                // console.info(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
                 // const soji: Soji = await fetch(
                 //     sojisStrings[i].replace("ipfs://", "ipfs.io/ipfs/")).then(res => res.json())
                 const res = await fetch(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
@@ -55,12 +55,12 @@ export const getSojis = createAsyncThunk('search/getSojis', async () => {
                 soji.image = soji.image.replace(ipfsBaseURI, ipfsURI)
                 soji.animation_url = soji.animation_url.replace(ipfsBaseURI, ipfsURI)
 
-                console.info("soji:", soji)
+                // console.info("soji:", soji)
 
                 sojis.push(soji)
             }
         } catch (err) {
-            console.warn("Error: ", err)
+            // console.warn("Error: ", err)
         }
     }
     return sojis
@@ -93,10 +93,10 @@ const searchSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(getSojis.pending, (state, action) => {
-            console.info("getSojis pending")
+            // console.info("getSojis pending")
         })
         builder.addCase(getSojis.fulfilled, (state, action) => {
-            console.info("getSojis fulfilled")
+            // console.info("getSojis fulfilled")
             state.sojis = action.payload
             state.sojisResults = filterSojis(state.sojis, state.searchTerm)
             return state
