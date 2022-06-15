@@ -1,5 +1,3 @@
-import { Blob } from "buffer";
-
 export async function toBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
         let reader = new FileReader();

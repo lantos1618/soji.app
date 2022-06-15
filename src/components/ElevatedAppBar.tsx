@@ -3,11 +3,6 @@ import React from 'react';
 import { AppBar, Box, Button, Stack, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 import { SearchBox } from './Search/SearchBox';
 
-// @tslint:disable-next-line
-import { ethers } from 'ethers';
-// @tslint:disable-next-line:no-any
-import Web3Modal from "web3modal";
-
 
 interface ElevationScrollProps {
     window?: () => Window;

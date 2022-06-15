@@ -9,7 +9,6 @@ import { toBase64, toBuffer } from "../../services/utils";
 import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
-import { Blob } from "buffer";
 
 
 // TODO: find a better home for this

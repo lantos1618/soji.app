@@ -17,7 +17,7 @@ export function SearchBox() {
 
     useEffect(() => {
         dispatch(getSojis())
-    }, [])
+    }, [dispatch])
 
     return <Stack direction="row" spacing="2">
         <TextField

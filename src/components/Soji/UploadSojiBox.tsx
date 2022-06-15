@@ -39,7 +39,7 @@ function TextFrom() {
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.name === "tags") {
             dispatch(setSojiFileToUpload({ ...sojiFileToUpload,
-                 tags: e.target.value.split(/\s|\,/).filter(str => str.trim()) }));
+                 tags: e.target.value.split(/\s|,/).filter(str => str.trim()) }));
             return
         }
         dispatch(setSojiFileToUpload({ ...sojiFileToUpload, [e.target.name]: e.target.value }));

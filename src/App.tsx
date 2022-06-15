@@ -35,7 +35,12 @@ const darkTheme = createTheme({
 //     onChange(image | audio) -> dispatch -> readFileData -> update State
 //     onSubmit -> dispatch -> uploadToIPFS -> initiateContract
 
-
+// declare global window.ethereum
+declare global {
+    interface Window {
+        ethereum: any;
+    }
+}
 
 function App() {
     return <Provider store={store}>
