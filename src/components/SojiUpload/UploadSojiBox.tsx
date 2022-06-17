@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 // import { useMoralis, useWeb3Contract } from "react-moralis"
 import { useAppDispatch, useAppSelector } from "../../services/hooks";
 import { setFileData, setSojiFileToUpload, submitSoji } from "./uploadSojiService";
+// import { useMoralis } from "react-moralis";
 
 function MediaPreview({ name, image, audio }: {
     name: string, image: string | File | undefined, audio: string | File | undefined
@@ -38,8 +39,10 @@ function TextFrom() {
     // handel text field change
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.name === "tags") {
-            dispatch(setSojiFileToUpload({ ...sojiFileToUpload,
-                 tags: e.target.value.split(/\s|,/).filter(str => str.trim()) }));
+            dispatch(setSojiFileToUpload({
+                ...sojiFileToUpload,
+                tags: e.target.value.split(/\s|,/).filter(str => str.trim())
+            }));
             return
         }
         dispatch(setSojiFileToUpload({ ...sojiFileToUpload, [e.target.name]: e.target.value }));
@@ -102,17 +105,18 @@ function SojiDropZone() {
 export default function UploadSoji() {
 
     // TODO: fix this from re-rendering the image and audio every time the user changes the text fields
-    const { sojiFileToUpload, validation} = useAppSelector((state) => state.uploadSojiReducer);
+    const { sojiFileToUpload, validation } = useAppSelector((state) => state.uploadSojiReducer);
     const dispatch = useAppDispatch();
 
     // const { isWeb3Enabled } = useMoralis();
-    const isWeb3Enabled = true;
+    const isWeb3Enabled = typeof window.ethereum !== 'undefined';
 
     function submitHandle() {
-        dispatch(submitSoji({sojiFileToUpload,  validation}));
+        dispatch(submitSoji({ sojiFileToUpload, validation }));
     }
 
     function submitRandomHandle() {
+
     }
 
 
@@ -125,7 +129,7 @@ export default function UploadSoji() {
             <SojiDropZone />
             <Button variant="outlined" onClick={submitHandle}>Submit</Button>
             <Tooltip title="mint a soji with rare traits">
-                <Button variant="outlined"  onClick={submitRandomHandle}>I'm Feeling Lucky</Button>
+                <Button variant="outlined" onClick={submitRandomHandle}>I'm Feeling Lucky</Button>
             </Tooltip>
         </Stack>
     </Container> :

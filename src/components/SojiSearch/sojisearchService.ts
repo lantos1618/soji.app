@@ -7,7 +7,8 @@ import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
 
-import {Moralis} from "moralis"
+import { ethers } from 'ethers';
+// import { Moralis } from "moralis"
 import { Soji } from '../Soji/soji';
 
 // define a interface of the search state
@@ -28,12 +29,13 @@ const initialState: SearchState = {
 export const getSojis = createAsyncThunk('search/getSojis', async () => {
     const ipfsBaseURI = "ipfs://";
     const ipfsURI = "https://ipfs.io/ipfs/";
-    const ethers = Moralis.web3Library;
-    // const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const provider = await Moralis.enableWeb3();
+    // const ethers = Moralis.web3Library;
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // const provider = await Moralis.enableWeb3();
     const sojis: Soji[] = []
 
-    if (Moralis.isWeb3Enabled()) {
+    // if (Moralis.isWeb3Enabled()) {
+    if (typeof window.ethereum !== 'undefined') {
         const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as any as SojiNft
         try {
             const sojiCount = await contract.getSOJICount()
@@ -50,7 +52,7 @@ export const getSojis = createAsyncThunk('search/getSojis', async () => {
                 // console.info(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
                 // const soji: Soji = await fetch(
                 const res = await fetch(sojisStrings[i].replace(ipfsBaseURI, ipfsURI))
-                
+
                 const soji: Soji = await res.json()
 
                 // soji.image = await (await fetch(soji.image.replace(ipfsBaseURI, ipfsURI))).text()
@@ -84,7 +86,7 @@ function filterSojis(sojis: Soji[], searchTerm: string) {
 
 
 // create the search slice
-const searchSlice = createSlice({
+const sojiSearchSlice = createSlice({
     name: 'search',
     initialState,
     reducers: {
@@ -108,10 +110,10 @@ const searchSlice = createSlice({
 })
 
 // export the search slice
-export const { setSearchTerm } = searchSlice.actions
+export const { setSearchTerm } = sojiSearchSlice.actions
 
 // export the getter of the search state
 export const getSearchTerm = (state: RootState) => state.searchReducer.searchTerm
 // export the reducer of the search state
-export const searchReducer = searchSlice.reducer
+export const searchReducer = sojiSearchSlice.reducer
 

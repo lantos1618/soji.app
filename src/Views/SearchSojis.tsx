@@ -1,5 +1,5 @@
 import { Container, Stack } from "@mui/material";
-import { SojiSearchResults } from "../components/Search/SojiSearchResults";
+import { SojiSearchResults } from "../components/SojiSearch/SojiSearchResults";
 
 export function SearchSounds() {
     return <Container style={{ paddingTop: "50px" }}>

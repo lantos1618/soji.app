@@ -1,9 +1,9 @@
 
-import React from 'react';
-import { AppBar, Box, Stack, Toolbar, Typography, useScrollTrigger } from '@mui/material';
-import { SearchBox } from './Search/SearchBox';
+import React, { useEffect, useState } from 'react';
+import { AppBar, Box, Button, Stack, Toolbar, Typography, useScrollTrigger } from '@mui/material';
+import { SearchBox } from './SojiSearch/SojiSearchBox';
 import { Container } from '@mui/system';
-import { ConnectButton } from 'web3uikit';
+// import {Moralis } from "moralis"
 
 
 interface ElevationScrollProps {
@@ -24,6 +24,28 @@ function ElevationScroll(props: ElevationScrollProps) {
 
 
 export default function ElevatedAppBar() {
+    async function handleWallet() {
+        // const provider = await Moralis.enableWeb3()
+        if (typeof window.ethereum === "undefined") {
+            return
+        }
+        const provider = window.ethereum;
+        // await provider.send("eth_requestAccounts", []);
+        await provider.request({ method: 'eth_requestAccounts' })
+        console.info("shit")
+    }
+    const [web3Account, setWeb3Account] = useState("");
+    useEffect(() => {
+        if (typeof window.ethereum === 'undefined') {
+            return
+        }
+
+        window.ethereum.on("accountsChanged", (accounts: any) => {
+            setWeb3Account(accounts[0]);
+            console.log(accounts)
+        })
+    }, [])
+
 
     return <>
         <ElevationScroll >
@@ -41,7 +63,7 @@ export default function ElevatedAppBar() {
                                 <Typography variant="h4" align={"center"} component="div">
                                     Soji 🍶🔊
                                 </Typography>
-                                {/* <ConnectButton moralisAuth={true} /> */}
+                                <Button onClick={handleWallet}>{web3Account !== '' ? web3Account : 'Connect Wallet'}</Button>
                             </Stack>
                             <SearchBox />
                         </Stack>

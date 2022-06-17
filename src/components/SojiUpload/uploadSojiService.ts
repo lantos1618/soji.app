@@ -8,7 +8,8 @@ import { toBase64, toBuffer } from "../../services/utils";
 import sojiNftAddress from "../../contracts/SojiNFTAddress.json";
 import sojiNFTJSON from "../../artifacts/contracts/SojiNFT.sol/SojiNft.json";
 import { SojiNft } from "../../types";
-import { Moralis } from "moralis"
+import {ethers} from "ethers";
+// import { Moralis } from "moralis"
 import { Soji } from "../Soji/soji";
 
 // TODO: find a better home for this
@@ -130,12 +131,12 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
         // check validation on sojiFileToUpload
         // this validation pattern needs to be redone...
         const { sojiHashString, soji } = await addSojiToIPFS(uploadSojiState)
-        const ethers = Moralis.web3Library;
-        // const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const provider = await Moralis.enableWeb3();
+        // const ethers = Moralis.web3Library;
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // const provider = await Moralis.enableWeb3();
         const signer = provider.getSigner()
 
-        if (Moralis.isWeb3Enabled()) {
+        if (typeof window.ethereum !== 'undefined') {
             const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as any as SojiNft
             const contractWithSigner = await contract.connect(signer)
             // console.info("contractWithSigner:", contractWithSigner)

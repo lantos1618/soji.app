@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../services/hooks';
-import { getSojis, setSearchTerm } from './searchService';
+import { getSojis, setSearchTerm } from './sojisearchService';
 
 
 export function SearchBox() {
