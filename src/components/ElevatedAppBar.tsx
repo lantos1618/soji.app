@@ -4,6 +4,8 @@ import { AppBar, Box, Button, Stack, Toolbar, Typography, useScrollTrigger } fro
 import { SearchBox } from './SojiSearch/SojiSearchBox';
 import { Container } from '@mui/system';
 // import {Moralis } from "moralis"
+import Web3Modal from "web3modal";
+import { ethers } from 'ethers';
 
 
 interface ElevationScrollProps {
@@ -28,11 +30,28 @@ export default function ElevatedAppBar() {
         // const provider = await Moralis.enableWeb3()
         if (typeof window.ethereum === "undefined") {
             return
+
         }
-        const provider = window.ethereum;
-        // await provider.send("eth_requestAccounts", []);
-        await provider.request({ method: 'eth_requestAccounts' })
-        console.info("shit")
+        const providerOptions = {
+            /* See Provider Options Section */
+        };
+
+        const web3Modal = new Web3Modal({
+            network: "mainnet", // optional
+            cacheProvider: true, // optional
+            providerOptions // required
+        });
+
+        const instance = await web3Modal.connect();
+
+        const provider = new ethers.providers.Web3Provider(instance);
+        const signer = provider.getSigner();
+
+        // const provider = window.ethereum;
+        // const results = await provider.send({ method: 'eth_requestAccounts' });
+        const accounts = await provider.send('eth_accounts', []);
+        setWeb3Account(accounts[0]);
+
     }
     const [web3Account, setWeb3Account] = useState("");
     useEffect(() => {
