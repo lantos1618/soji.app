@@ -23,18 +23,17 @@ const EthereumSlice = createSlice({
     initialState,
     reducers: {
         setProvider: (state, action: PayloadAction<any>) => {
-            return state
         }
     },
     extraReducers: (builder) => {
-       
+
     }
 })
 
 // export the search slice
 export const { setProvider } = EthereumSlice.actions
 
-export const getProvider= (state: RootState) => state.ethereumReducer.provider;
+export const getProvider = (state: RootState) => state.ethereumReducer.provider;
 // export the reducer of the search state
 export const ethereumReducer = EthereumSlice.reducer
 
