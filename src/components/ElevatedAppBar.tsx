@@ -66,6 +66,8 @@ export default function ElevatedAppBar() {
     }, [])
 
 
+    const appBarRef = React.useRef<HTMLDivElement>(null);
+
     return <>
         <ElevationScroll >
             <AppBar>
@@ -75,13 +77,26 @@ export default function ElevatedAppBar() {
                     justifyContent: "space-between",
                     alignItems: "center",
                 }}>
-                    <Container>
-
+                    <Container ref={appBarRef}>
                         <Stack width="100%" spacing={1}>
                             <Stack direction="row" justifyContent="space-between">
-                                <Typography variant="h4" align={"center"} component="div">
-                                    Soji 🍶🔊
-                                </Typography>
+                                <Stack alignItems={"flex-start"}>
+                                    <Typography variant="h4" align={"center"} component="div">
+                                        Soji
+                                    </Typography>
+                                    <Typography variant="h4" align={"center"} component="div">
+                                        /səʊdʒi/
+                                    </Typography>
+                                    <Typography>
+                                        noun: soji; plural noun: sojis;
+                                    </Typography>
+                                    <Typography>
+                                        sound + emoji = Soji
+                                    </Typography>
+                                    <Typography>
+                                        2020s: Soji is a Japanese word for "sound + emoji
+                                    </Typography>
+                                </Stack>
                                 <Button onClick={handleWallet}>{web3Account !== '' ? web3Account : 'Connect Wallet'}</Button>
                             </Stack>
                             <SearchBox />
@@ -90,6 +105,6 @@ export default function ElevatedAppBar() {
                 </Toolbar>
             </AppBar>
         </ElevationScroll>
-        <Box style={{ height: "120px" }} />
+        <Box style={{ height: appBarRef.current ? appBarRef.current.offsetHeight + 20 : "120px"  }} />
     </>
 }

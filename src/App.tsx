@@ -9,11 +9,7 @@ import { store } from './services/store';
 import { SearchSounds } from './Views/SearchSojis';
 
 
-const darkTheme = createTheme({
-    palette: {
-        mode: 'dark',
-    },
-});
+
 
 
 // this app entry is not the best just throwing things together to get a prototype...
@@ -44,6 +40,13 @@ declare global {
 }
 
 function App() {
+    const darkTheme = createTheme({
+        palette: {
+            mode: 'dark',
+            // mode: 'dark',
+        },
+    });
+
     return <Provider store={store}>
         {/* <MoralisProvider initializeOnMount={false}> */}
             <BrowserRouter>
