@@ -1,6 +1,5 @@
 <script lang="ts">
 import Sojis from './lib/Sojis.svelte';
-import Todos from './lib/Todos.svelte'
 </script>
 
 <main>
@@ -10,7 +9,6 @@ import Todos from './lib/Todos.svelte'
     apps.
   </p>
 
-  <Todos></Todos>
   <Sojis></Sojis>
 </main>
 

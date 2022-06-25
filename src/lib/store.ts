@@ -1,20 +1,6 @@
 import { writable } from 'svelte/store';
 import {ethers } from "ethers"
 
-
-export interface iTodo {
-    id: number;
-    title: string;
-    done: boolean;
-}
-
-const initialTodos: iTodo[] = [
-    { id: 1, title: 'Learn Svelte', done: false },
-    { id: 2, title: 'Learn TypeScript', done: false },
-]
-
-export const todos = writable(initialTodos);
-
 export interface iSoji {
     name: string;
     description: string;
