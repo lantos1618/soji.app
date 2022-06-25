@@ -21,7 +21,9 @@
   "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte",
     "./scripts",
     "./test",
-    "vite.config.ts"
+    "vite.config.ts",
+    "postcss.config.ts",
+    "tailwind.config.ts"
   ],
   "files": [
     "./hardhat.config.ts"

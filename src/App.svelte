@@ -1,16 +1,19 @@
 <script lang="ts">
   import SojiDefinition from "./lib/SojiDefinition.svelte";
   import Sojis from "./lib/Sojis.svelte";
+
 </script>
 
 <main>
+  <h1 class="text-3xl font-bold underline">
+    Hello world!
+  </h1>
   <SojiDefinition></SojiDefinition>
   <Sojis />
 </main>
 
 <style>
-  :root {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  }
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
 </style>
