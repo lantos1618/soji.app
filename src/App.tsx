@@ -14,7 +14,6 @@ import { SearchSounds } from './Views/SearchSojis';
 
 // this app entry is not the best just throwing things together to get a prototype...
 // App
-//   Main
 //     App bar
 //       logo
 //       login
@@ -48,7 +47,6 @@ function App() {
     });
 
     return <Provider store={store}>
-        {/* <MoralisProvider initializeOnMount={false}> */}
             <BrowserRouter>
                 <ThemeProvider theme={darkTheme}>
                     <CssBaseline />

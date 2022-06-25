@@ -99,13 +99,13 @@ async function addSojiToIPFS(uploadSojiState: UploadSojiState) {
     const ipfs = await IFPSSingleton.getInstance();
 
     const imageHash = await ipfs.add(imageBuffer);
-    // console.info("image pinned at", await ipfs.pin.add(imageHash.cid))
+    console.info("image pinned at", await ipfs.pin.add(imageHash.cid))
 
-    // console.info("imageHash:", imageHash);
+    console.info("imageHash:", imageHash);
     const audioHash = await ipfs.add(audioBuffer!);
 
-    // console.info("audioHash:", audioHash);
-    // console.info("audio pinned at", await ipfs.pin.add(audioHash.cid))
+    console.info("audioHash:", audioHash);
+    console.info("audio pinned at", await ipfs.pin.add(audioHash.cid))
 
     const soji: Soji = {
         name,
@@ -115,10 +115,10 @@ async function addSojiToIPFS(uploadSojiState: UploadSojiState) {
         tags
     };
     const sojiHash = await ipfs.add(JSON.stringify(soji));
-    // console.info(await ipfs.pin.add(sojiHash.cid))
-    // console.info("soji pinned at", await ipfs.pin.add(audioHash.cid))
+    console.info(await ipfs.pin.add(sojiHash.cid))
+    console.info("soji pinned at", await ipfs.pin.add(audioHash.cid))
 
-    // console.info("soji submitted to ipfs", sojiHash, soji);
+    console.info("soji submitted to ipfs", sojiHash, soji);
     const sojiHashString = sojiHash.cid.toString();
     return { sojiHashString, soji };
 }
@@ -139,10 +139,10 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
         if (typeof window.ethereum !== 'undefined') {
             const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as any as SojiNft
             const contractWithSigner = await contract.connect(signer)
-            // console.info("contractWithSigner:", contractWithSigner)
+            console.info("contractWithSigner:", contractWithSigner)
 
             try {
-                // console.info("uploading soji to chain", soji)
+                console.info("uploading soji to chain", soji)
                 const transaction = await contractWithSigner.mintSoji(
                     "ipfs://" + sojiHashString
                 )
@@ -155,10 +155,10 @@ export const submitSoji = createAsyncThunk<{ sojiHashString: string, soji: Soji 
                 //     JSON.stringify(soji.tags),
                 // )
                 await transaction.wait()
-                // console.info("setGreeting transaction", await transaction)
+                console.info("setGreeting transaction", await transaction)
 
             } catch (err) {
-                // console.warn("Error: ", err)
+                console.warn("Error: ", err)
             }
         }
         return { sojiHashString, soji }
@@ -185,13 +185,12 @@ const uploadSojiSlice = createSlice({
             action.payload.image.length > 2 ? state.validation.image = true : state.validation.image = false;
             action.payload.tags.length > 0 ? state.validation.tags = true : state.validation.tags = false;
             state.sojiFileToUpload = action.payload
-            return state
         },
     },
     extraReducers: (builder) => {
         // this throws a non-serializable error but is okay because the design of the slice is to not serialize file into the state 
         builder.addCase(setFileData.fulfilled, (state, action) => {
-            // console.info("setFileData.fulfilled", action.payload)
+            console.info("setFileData.fulfilled", action.payload)
             // TODO: make this look nice
             if (action.payload.key === "imageFile") {
                 state.sojiFileToUpload.imageFile = action.payload.file;
@@ -208,7 +207,6 @@ const uploadSojiSlice = createSlice({
                 state.validation.animation_url = true
                 state.validation.audioFile = true
             }
-            return state
         })
 
         // uploading the soji to IPFS and the contract
@@ -217,18 +215,15 @@ const uploadSojiSlice = createSlice({
         // fulfilled -> log maybe modal
         // error -> log maybe modal
         builder.addCase(submitSoji.pending, (state) => {
-            // console.info("submitSoji.pending")
-            return state
+            console.info("submitSoji.pending")
         })
         builder.addCase(submitSoji.fulfilled, (state, action) => {
-            // console.info("submitSoji.fulfilled", action.payload)
+            console.info("submitSoji.fulfilled", action.payload)
             state.sojiFileToUpload.image = action.payload.soji.image
             state.sojiFileToUpload.animation_url = action.payload.soji.animation_url
-            return state
         })
         builder.addCase(submitSoji.rejected, (state, action) => {
-            // console.info("submitSoji.rejected", action.error)
-            return state
+            console.info("submitSoji.rejected", action.error)
         })
     }
 })

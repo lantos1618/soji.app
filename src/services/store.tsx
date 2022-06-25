@@ -6,7 +6,6 @@ import { uploadSojiReducer } from '../components/SojiUpload/uploadSojiService';
 import { ethereumReducer } from './ethereumService';
 
 
-
 export const store = configureStore({
     reducer: {
         ethereumReducer,
