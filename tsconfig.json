@@ -14,14 +14,16 @@
      */
     "allowJs": true,
     "checkJs": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "composite": true,
+    "moduleResolution": "node"
   },
   "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte",
     "./scripts",
     "./test",
+    "vite.config.ts"
   ],
   "files": [
     "./hardhat.config.ts"
   ], 
-  "references": [{ "path": "./tsconfig.node.json" }]
 }
