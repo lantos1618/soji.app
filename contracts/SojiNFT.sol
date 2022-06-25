@@ -129,10 +129,16 @@ contract SojiNft is ERC721URIStorage, ChainlinkClient {
         string memory tokenURI
     ) public returns (uint256) {
     
+        if (contains(tokenURI, "attributes")) {
+            // return error
+            revert IllegalAttemptToSetAttributes();
+        }
+
         uint256 newItemId = s_tokenIds.current();
         _safeMint(msg.sender, newItemId);
         s_tokenIds.increment();    
         _setTokenURI(newItemId, tokenURI);
+
 
         return newItemId;
     }
