@@ -65,8 +65,14 @@ export default function ElevatedAppBar() {
         })
     }, [])
 
-
+    const [appBarHeight, setAppBarHeight] = useState(120)
     const appBarRef = React.useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if(appBarRef.current ) {
+            setAppBarHeight(appBarRef.current.offsetHeight + 20)
+        }   
+    }, [appBarRef])
 
     return <>
         <ElevationScroll >
@@ -105,6 +111,6 @@ export default function ElevatedAppBar() {
                 </Toolbar>
             </AppBar>
         </ElevationScroll>
-        <Box style={{ height: appBarRef.current ? appBarRef.current.offsetHeight + 20 : "120px"  }} />
+        <Box style={{ height: appBarHeight  }} />
     </>
 }
