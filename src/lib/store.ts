@@ -9,7 +9,7 @@ export interface iSoji {
     tags: string[];
 }
 
-const initialSojis: iSoji[] = [
+let initialSojis: iSoji[] = [
     {
         name: "Dar-ling",
         description: "zerotwo saying darling",
@@ -18,5 +18,14 @@ const initialSojis: iSoji[] = [
         tags: ["zerotwo", "darling"]
     }
 ]
+for (let i = 0; i < 10; i++) {
+    initialSojis.push({
+        name: "Soji " + i,
+        description: "Soji " + i,
+        image: "https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F926655043065741362.gif%3Fv%3D1&w=64&q=75",
+        animation_url: "https://www.myinstants.com/media/sounds/dar-ling.mp3",
+        tags: ["soji", "soji " + i]
+    })
+}
 
-export const sojis = writable(initialSojis);
+export let sojis = writable(initialSojis);
