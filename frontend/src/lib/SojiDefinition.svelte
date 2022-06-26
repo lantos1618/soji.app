@@ -13,13 +13,17 @@
     function handleSojiSoundClick() {
         sojiAudio.play();
     }
-
 </script>
 
-<div class="container border p-2 mx-auto">
+<div class="flex flex-col border rounded p-2">
     <div class="flex">
         <div>
-            <div class="p-2 rounded-full border {sojiAudioPlaying ? 'bg-blue-200' : 'bg-white-100'}" on:click={handleSojiSoundClick}>
+            <div
+                class="p-2 rounded-full border {sojiAudioPlaying
+                    ? 'bg-blue-200'
+                    : 'bg-white-100'}"
+                on:click={handleSojiSoundClick}
+            >
                 <VolumeHigh size={"1.5em"} color={"dodgerblue"} />
             </div>
         </div>
@@ -45,8 +49,3 @@
     <p>2020s: Soji is a Japanese word for sound + emoji</p>
 </div>
 
-<style>
-    p {
-        padding: 2px;
-    }
-</style>
