@@ -16,12 +16,12 @@ async function main() {
   console.log("SojiNFT deployed to:", sojiNFT.address)
 
   // const sojiContractAddressLocation = "./src/artifacts/contracts/SojiNft.sol/"
-  const sojiContractAddressLocation = "./frontend/src/contracts/"
-  if (!fs.readdirSync(sojiContractAddressLocation)){
-    fs.mkdirSync(sojiContractAddressLocation)
+  const frontendAssetFolder = "./frontend/src/assets/"
+  if (!fs.readdirSync(frontendAssetFolder)){
+    fs.mkdirSync(frontendAssetFolder)
   }
   fs.writeFileSync(
-    sojiContractAddressLocation + "SojiNFTAddress.json",
+    frontendAssetFolder + "SojiNFTAddress.json",
     JSON.stringify({ address: sojiNFT.address })
   )
 }
