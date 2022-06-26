@@ -46,11 +46,11 @@ function getHardhatConfig() {
 export default <HardhatUserConfig>{
   solidity: "0.8.14",
   paths: {
-    artifacts: "./src/artifacts",
+    artifacts: "./frontend/src/artifacts",
 
   },
   typechain: {
-    outDir: "./src/types",
+    outDir: "./frontend/src/types",
   },
   networks: {
     hardhat: getHardhatConfig(),
