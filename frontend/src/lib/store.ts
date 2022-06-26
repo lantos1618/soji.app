@@ -1,7 +1,6 @@
 import { writable } from 'svelte/store';
-import {ethers } from "ethers"
 
-export interface iSoji {
+export interface SojiType {
     name: string;
     description: string;
     image: string;
@@ -9,7 +8,7 @@ export interface iSoji {
     tags: string[];
 }
 
-let initialSojis: iSoji[] = [
+let initialSojis: SojiType[] = [
     {
         name: "Dar-ling",
         description: "zerotwo saying darling",
@@ -29,5 +28,4 @@ for (let i = 0; i < 10; i++) {
 }
 
 export let sojis = writable(initialSojis);
-
-
+export let sojisSearchResult = writable(initialSojis, (set) => {});
