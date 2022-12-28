@@ -71,6 +71,8 @@ export default function ElevatedAppBar() {
     useEffect(() => {
         if(appBarRef.current ) {
             setAppBarHeight(appBarRef.current.offsetHeight + 20)
+            // dumb remove me
+            handleWallet();
         }   
     }, [appBarRef])
 

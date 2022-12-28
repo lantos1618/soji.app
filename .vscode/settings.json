@@ -1,3 +1,8 @@
 {
-    "C_Cpp.intelliSenseEngineFallback": "Enabled"
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#211090",
+        "titleBar.activeBackground": "#2E16C9",
+        "titleBar.activeForeground": "#FDFDFF"
+    }
 }

@@ -39,6 +39,7 @@ export const getSojis = createAsyncThunk('search/getSojis', async () => {
         const contract = new ethers.Contract(sojiNftAddress.address, sojiNFTJSON.abi, provider) as any as SojiNft
         try {
             const sojiCount = await contract.getSOJICount()
+            console.log("sojiCount", sojiCount);
             const sojisStringPromise: Promise<string>[] = []
 
 

@@ -4,9 +4,12 @@ import { HardhatUserConfig } from "hardhat/types";
 import { task } from "hardhat/config";
 
 import '@typechain/hardhat'
+import "@nomicfoundation/hardhat-toolbox";
+
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import "@nomiclabs/hardhat-etherscan";
+
 import "solidity-coverage";
 
 
@@ -43,7 +46,7 @@ function getHardhatConfig() {
   }
 }
 
-export default <HardhatUserConfig>{
+export default {
   solidity: "0.8.14",
   paths: {
     artifacts: "./src/artifacts",
@@ -77,4 +80,4 @@ export default <HardhatUserConfig>{
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   }
-};
+} as HardhatUserConfig;
